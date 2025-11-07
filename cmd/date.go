@@ -5,7 +5,7 @@ import (
     "time"
 
     "github.com/spf13/cobra"
-    "github.com/<username>/datool/internal/calendar"
+    "github.com/iliyaag/datool/internal/calendar"
 )
 
 var dateCmd = &cobra.Command{

@@ -4,23 +4,18 @@ import (
     "fmt"
     "time"
 
+    "dattool/internal/calendar"
     "github.com/spf13/cobra"
-    "github.com/iliyaag/datool/internal/calendar"
 )
 
 var dateCmd = &cobra.Command{
     Use:   "date",
-    Short: "show jalali date",
-    Long:  "Yhis command displays todays jalali date or ...",
-    Args:  cobra.MaximumNArgs(1),
+    Short: "Print today's Jalali date",
     Run: func(cmd *cobra.Command, args []string) {
-        if len(args) == 0 {
-            now := time.Now()
-            y, m, d := now.Date()
-            jy, jm, jd := calendar.GregorianToJalali(y, int(m), d)
-            fmt.Printf("%04d-%02d-%02d\n", jy, jm, jd)
-            return
-        }
+        now := time.Now()
+        y, m, d := now.Date()
+        jy, jm, jd := calendar.GregorianToJalali(y, int(m), d)
+        fmt.Printf("%04d-%02d-%02d\n", jy, jm, jd)
     },
 }
 

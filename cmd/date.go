@@ -23,6 +23,35 @@ var weekdaysFA = []string{
     "shanbe",
 }
 
+var gregorianMonthsEN = []string{
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+}
+
+var jalaliMonthsFA = []string{
+    "Farvardin",
+    "Ordibehesht",
+    "Khordad",
+    "Tir",
+    "Mordad",
+    "Shahrivar",
+    "Mehr",
+    "Aban",
+    "Azar",
+    "Dey",
+    "Bahman",
+    "Esfand",
+}
 var dateCmd = &cobra.Command{
     Use:   "date",
     Short: "Print current date",
@@ -39,10 +68,11 @@ var dateCmd = &cobra.Command{
             out = strings.ReplaceAll(out, "%Y", fmt.Sprintf("%04d",y))
             out = strings.ReplaceAll(out, "%m", fmt.Sprintf("%02d",m))
             out = strings.ReplaceAll(out, "%d", fmt.Sprintf("%02d",d))
-
+            out = strings.ReplaceAll(out, "%gmonthname", gregorianMonthsEN[m-1])
             out = strings.ReplaceAll(out, "%JY", fmt.Sprintf("%04d",jy))
             out = strings.ReplaceAll(out, "%JM", fmt.Sprintf("%02d",jm))
             out = strings.ReplaceAll(out, "%JD", fmt.Sprintf("%02d",jd))
+            out = strings.ReplaceAll(out, "%jmonthname", jalaliMonthsFA[jm-1])
             out = strings.ReplaceAll(out, "%W", weekdayEN)
             out = strings.ReplaceAll(out, "%JW", weekdayFA)
             out = strings.ReplaceAll(out, "%H", fmt.Sprintf("%02d", h))

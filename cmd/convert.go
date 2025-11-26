@@ -58,13 +58,20 @@ func init() {
 }
 
 func parseDate(s string) (int, int, int, error) {
-    parts := strings.Split(s, "-")
+
+    // Allow both 2025-11-21 and 2025/11/21
+    separator := "-"
+    if strings.Contains(s, "/") {
+        separator = "/"
+    }
+
+    parts := strings.Split(s, separator)
     if len(parts) != 3 {
-        return 0, 0, 0, errors.New("invalid date format, expected YYYY-MM-DD")
+        return 0, 0, 0, errors.New("invalid date format, expected YYYY-MM-DD or YYYY/MM/DD")
     }
 
     var y, m, d int
-    _, err := fmt.Sscanf(s, "%d-%d-%d", &y, &m, &d)
+    _, err := fmt.Sscanf(s, fmt.Sprintf("%%d%s%%d%s%%d", separator, separator), &y, &m, &d)
     if err != nil {
         return 0, 0, 0, errors.New("cannot parse date numbers")
     }

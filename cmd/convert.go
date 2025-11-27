@@ -58,20 +58,43 @@ func init() {
 }
 
 func parseDate(s string) (int, int, int, error) {
+    separators := []string{"-", "/", "."}
+    used := ""
 
-    // Allow both 2025-11-21 and 2025/11/21
-    separator := "-"
-    if strings.Contains(s, "/") {
-        separator = "/"
+    // Detect which separator is used
+    for _, sep := range separators {
+        if strings.Contains(s, sep) {
+            if used == "" {
+                used = sep
+            } else {
+                return 0, 0, 0, errors.New("invalid date: multiple separators detected")
+            }
+        }
     }
 
-    parts := strings.Split(s, separator)
+    // Case 1: No separator → must be YYYYMMDD
+    if used == "" {
+        if len(s) != 8 {
+            return 0, 0, 0, errors.New("invalid date: expected 8 digits (YYYYMMDD)")
+        }
+
+        var y, m, d int
+        _, err := fmt.Sscanf(s, "%4d%2d%2d", &y, &m, &d)
+        if err != nil {
+            return 0, 0, 0, errors.New("cannot parse date digits")
+        }
+
+        return y, m, d, nil
+    }
+
+    // Case 2: Normal date with separators
+    parts := strings.Split(s, used)
     if len(parts) != 3 {
-        return 0, 0, 0, errors.New("invalid date format, expected YYYY-MM-DD or YYYY/MM/DD")
+        return 0, 0, 0, errors.New("invalid date format")
     }
 
     var y, m, d int
-    _, err := fmt.Sscanf(s, fmt.Sprintf("%%d%s%%d%s%%d", separator, separator), &y, &m, &d)
+    _, err := fmt.Sscanf(s, fmt.Sprintf("%%d%s%%d%s%%d", used, used), &y, &m, &d)
     if err != nil {
         return 0, 0, 0, errors.New("cannot parse date numbers")
     }

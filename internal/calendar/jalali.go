@@ -1,5 +1,7 @@
 package calendar
 
+import "time"
+
 var gdm = [...]int{0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334}
 
 func GregorianToJalali(gy, gm, gd int) (jy, jm, jd int) {
@@ -41,62 +43,18 @@ func GregorianToJalali(gy, gm, gd int) (jy, jm, jd int) {
 }
 
 func JalaliToGregorian(jy, jm, jd int) (gy, gm, gd int) {
-    if jy > 979 {
-        gy = 1600
-        jy -= 979
-    } else {
-        gy = 621
-    }
+    est := jy + 621
 
-    days := 365*jy + jy/33*8 + (jy%33+3)/4
+    start := time.Date(est-1, 1, 1, 0, 0, 0, 0, time.UTC)
+    end := time.Date(est+2, 1, 1, 0, 0, 0, 0, time.UTC)
 
-    if jm < 7 {
-        days += (jm - 1) * 31
-    } else {
-        days += (jm-7)*30 + 186
-    }
-
-    days += jd - 1
-
-    gy += 400 * (days / 146097)
-    days %= 146097
-
-    leap := true
-    if days >= 36525 {
-        days--
-        gy += 100 * (days / 36524)
-        days %= 36524
-
-        if days >= 365 {
-            days++
-        } else {
-            leap = false
+    for t := start; t.Before(end); t = t.AddDate(0, 0, 1) {
+        y, m, d := t.Date()
+        jy2, jm2, jd2 := GregorianToJalali(y, int(m), d)
+        if jy2 == jy && jm2 == jm && jd2 == jd {
+            return y, int(m), d
         }
     }
 
-    gy += 4 * (days / 1461)
-    days %= 1461
-
-    if days >= 366 {
-        leap = false
-        days--
-        gy += days / 365
-        days %= 365
-    }
-
-    // month and day
-    g_dm := [...]int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-    if leap {
-        g_dm[1] = 29
-    }
-
-    var i int
-    for i = 0; i < 12 && days >= g_dm[i]; i++ {
-        days -= g_dm[i]
-    }
-
-    gm = i + 1
-    gd = days + 1
-
-    return
+    return 0, 0, 0
 }

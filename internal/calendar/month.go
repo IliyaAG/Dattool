@@ -21,7 +21,7 @@ func JalaliMonthDays(year, month int) int {
 }
 
 // Build a printable Jalali calendar
-func JalaliMonthCalendar(jy, jm int) string {
+func JalaliMonthCalendar(jy, jm, highlightDay int) string {
     var builder strings.Builder
 
     // Header
@@ -48,7 +48,11 @@ func JalaliMonthCalendar(jy, jm int) string {
     // Days
     days := JalaliMonthDays(jy, jm)
     for d := 1; d <= days; d++ {
-        fmt.Fprintf(&builder, "%2d ", d)
+        if d == highlightDay {
+            fmt.Fprintf(&builder, "\033[7m%2d\033[0m ", d)
+        } else {
+            fmt.Fprintf(&builder, "%2d ", d)
+        }
         weekday++
         if weekday%7 == 0 {
             builder.WriteString("\n")

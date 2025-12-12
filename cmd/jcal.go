@@ -33,9 +33,16 @@ var jcalCmd = &cobra.Command{
             now := time.Now()
             jy, jm, _ = calendar.GregorianToJalali(now.Year(), int(now.Month()), now.Day())
         }
+        now := time.Now()
+        cjy, cjm, cjd := calendar.GregorianToJalali(now.Year(), int(now.Month()), now.Day())
+
+        highlight := 0
+        if jy == cjy && jm == cjm {
+            highlight = cjd
+        }
 
         // Print calendar
-        fmt.Print(calendar.JalaliMonthCalendar(jy, jm))
+        fmt.Print(calendar.JalaliMonthCalendar(jy, jm, highlight))
     },
 }
 

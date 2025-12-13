@@ -33,12 +33,12 @@ func JalaliMonthCalendar(jy, jm, highlightDay int) string {
     }
 
     fmt.Fprintf(&builder, "  %s %d\n", monthNames[jm-1], jy)
-    builder.WriteString("Su Mo Tu We Th Fr Sa\n")
+    builder.WriteString("Sh Ye Do Se Ch Pa Jo\n")
 
     // Find first weekday
     gy, gm, gd := JalaliToGregorian(jy, jm, 1)
     first := time.Date(gy, time.Month(gm), gd, 0, 0, 0, 0, time.UTC)
-    weekday := int(first.Weekday()) // Sunday = 0
+    weekday := (int(first.Weekday()) + 1)%7
 
     // Leading spaces
     for i := 0; i < weekday; i++ {

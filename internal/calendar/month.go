@@ -6,6 +6,11 @@ import (
     "time"
 )
 
+const (
+    ansiReset = "\033[0m"
+    ansiGreenBG = "\033[42;30m"
+    ansiRed = "\033[31m"
+)
 // returns number of days in a Jalali month
 func JalaliMonthDays(year, month int) int {
     if month <= 6 {
@@ -49,7 +54,9 @@ func JalaliMonthCalendar(jy, jm, highlightDay int) string {
     days := JalaliMonthDays(jy, jm)
     for d := 1; d <= days; d++ {
         if d == highlightDay {
-            fmt.Fprintf(&builder, "\033[7m%2d\033[0m ", d)
+            fmt.Fprintf(&builder, "%s%2d%s ", ansiGreenBG, d, ansiReset)
+        } else if weekday == 6 {
+            fmt.Fprintf(&builder, "%s%2d%s ", ansiRed, d, ansiReset)
         } else {
             fmt.Fprintf(&builder, "%2d ", d)
         }

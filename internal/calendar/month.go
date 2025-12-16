@@ -53,9 +53,10 @@ func JalaliMonthCalendar(jy, jm, highlightDay int) string {
     // Days
     days := JalaliMonthDays(jy, jm)
     for d := 1; d <= days; d++ {
+        isFriday := weekday%7 == 6
         if d == highlightDay {
             fmt.Fprintf(&builder, "%s%2d%s ", ansiGreenBG, d, ansiReset)
-        } else if weekday == 6 {
+        } else if isFriday {
             fmt.Fprintf(&builder, "%s%2d%s ", ansiRed, d, ansiReset)
         } else {
             fmt.Fprintf(&builder, "%2d ", d)

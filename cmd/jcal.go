@@ -9,7 +9,7 @@ import (
     "dattool/internal/calendar"
     "github.com/spf13/cobra"
 )
-
+var yearView bool
 var jcalCmd = &cobra.Command{
     Use:   "jcal [year] [month]",
     Short: "Show Jalali calendar for a given month",
@@ -40,12 +40,22 @@ var jcalCmd = &cobra.Command{
         if jy == cjy && jm == cjm {
             highlight = cjd
         }
-
+        if yearView {
+            calendar.PrintJalaliYear(jy, cjy, cjm, cjd)
+            return
+        }
         // Print calendar
         fmt.Print(calendar.JalaliMonthCalendar(jy, jm, highlight))
     },
 }
 
 func init() {
+    jcalCmd.Flags().BoolVarP(
+        &yearView,
+        "year",
+        "y",
+        false,
+        "Show whole year calender",
+    )
     rootCmd.AddCommand(jcalCmd)
 }

@@ -10,6 +10,7 @@ import (
     "github.com/spf13/cobra"
 )
 var yearView bool
+var threeView bool
 var jcalCmd = &cobra.Command{
     Use:   "jcal [year] [month]",
     Short: "Show Jalali calendar for a given month",
@@ -44,6 +45,11 @@ var jcalCmd = &cobra.Command{
             calendar.PrintJalaliYear(jy, cjy, cjm, cjd)
             return
         }
+
+        if threeView {
+            calendar.PrintThreeMonths(jy, jm, cjy, cjm, cjd)
+            return
+        }
         // Print calendar
         fmt.Print(calendar.JalaliMonthCalendar(jy, jm, highlight))
     },
@@ -56,6 +62,13 @@ func init() {
         "y",
         false,
         "Show whole year calender",
+    )
+    jcalCmd.Flags().BoolVarP(
+        &threeView,
+        "three",
+        "3",
+        false,
+        "Show previous, current and next month",
     )
     rootCmd.AddCommand(jcalCmd)
 }

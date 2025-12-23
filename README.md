@@ -6,6 +6,7 @@ CLI for date and time
 - [Subcommands:](#subcommands)
   - [date](#date)
   - [convert](#convert)
+  - [jcal](#jcal)
 - [Quick Setup:](#quick-setup)
   - [Build From Source Code](#build-from-source-code)
   - [Install Package](#install-package)
@@ -14,3 +15,8 @@ CLI for date and time
 
 
 # convert
+
+
+# jcal
+
+
